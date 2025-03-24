@@ -1,0 +1,23 @@
+extract_cv_info:
+  description: >
+    Review the resume CV_Assia_Chafi_2025.pdf and extract key details
+    about experience, skills, projects, and achievements.
+  expected_output: >
+    JSON response following the `CVInfo` model with:
+    - Work experience (list of job roles, companies, dates, descriptions)
+    - Education (list of degrees, institutions, graduation years)
+    - Skills (list of skills)
+    - Projects (list of project names, descriptions, and tech used)
+    - Certifications (list of certifications and issuing organizations)
+  agent: resume_assistant
+
+reporting_task:
+  description: >
+    Respond to visitors {question} about Assia Chafi skills, experience,
+    and portfolio using the extracted resume information.
+  expected_output: >
+    JSON response following the `VisitorResponse` model with:
+    - {question}
+    - A clear answer using `CVInfo`
+    - References to relevant CV sections for transparency.
+  agent: reporting_analyst
