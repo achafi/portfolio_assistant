@@ -1,6 +1,5 @@
 from pydantic import BaseModel
-from typing import List
-
+from typing import List, Optional
 
 class WorkExperience(BaseModel):
     job_title: str
@@ -52,3 +51,8 @@ class GitHubRepository(BaseModel):
 
 class GitHubRepositoriesResponse(BaseModel):
     repositories: List[GitHubRepository]
+
+class TaskAnalysis(BaseModel):
+    needs_resume_info: bool
+    needs_github_info: bool
+    reasoning: str  # Explanation of why these tasks were chosen

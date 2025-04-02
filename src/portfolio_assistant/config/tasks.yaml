@@ -17,9 +17,22 @@ list_github_projects:
     `list_github_repos_tool`. Focus on repository names and descriptions.
     The tool will use 'achafi' as the username.
   expected_output: >
-    A list of public GitHub repository names and their descriptions associated with the user 'achafi', as returned by the tool.
-    Example: ["project-name-1: Description of project 1", "project-name-2: Description of project 2"]
+    JSON response following the `GitHubRepositoriesResponse` model with:
+    - repositories: List of GitHubRepository objects containing:
+    - name: Repository name
+    - description: Repository description (optional)
   agent: github_project_lister
+
+analyse_question:
+  description: >
+    Analyze this question: "{question}"
+    Determine which tasks are needed to provide a complete answer.
+    Consider:
+    1. Does it require resume information? (skills, experience, education, etc.)
+    2. Does it require GitHub project information? (repositories, code projects)
+  expected_output: >
+    A Task Analysis object indicating which tasks are needed and why
+  agent: task_manager
 
 # fetch_specific_github_project_details:
 #   description: >
