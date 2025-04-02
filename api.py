@@ -6,8 +6,12 @@ import os
 
 # Load environment variables
 from dotenv import load_dotenv
+import agentops
 
 load_dotenv()
+
+
+agentops.init(api_key=os.getenv("AGENTOPS_API_KEY"))
 
 os.environ["OPENAI_API_KEY"] = os.getenv("OPENAI_API_KEY")
 # Check if API key is loaded correctly
@@ -50,3 +54,5 @@ async def ask_question(query: UserQuery):
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 8000))
     uvicorn.run(app, host="0.0.0.0", port=port)
+    # to run manually : uvicorn api:app --host 0.0.0.0 --port 8000 --reload
+    # exmaple of use :curl -X POST "http://127.0.0.1:8000/ask" -H "Content-Type: application/json" -d "{\"question\": \"What skills does Assia Chafi have?\"}"

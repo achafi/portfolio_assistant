@@ -44,3 +44,11 @@ class VisitorResponse(BaseModel):
     question: str
     answer: str
     references: List[CVReference]  # Where the answer is derived from
+
+
+class GitHubRepository(BaseModel):
+    name: str
+    description: str | None = None
+
+class GitHubRepositoriesResponse(BaseModel):
+    repositories: List[GitHubRepository]

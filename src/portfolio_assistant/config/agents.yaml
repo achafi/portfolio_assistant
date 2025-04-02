@@ -9,6 +9,32 @@ resume_assistant:
     You are known for your ability to find the most relevant
     information and present it in a clear and concise manner.
 
+list_github_projects:
+  description: >
+    Fetch a list of achafi's public GitHub repositories using the
+    `list_github_repos_tool`. Focus on repository names and descriptions.
+    The tool will use 'achafi' as the username.
+  expected_output: >
+    JSON response following the `GitHubRepositoriesResponse` model with:
+    - repositories: List of GitHubRepository objects containing:
+      - name: Repository name
+      - description: Repository description (optional)
+  agent: github_project_lister
+# github_project_detailer:
+#   role: >
+#     GitHub Repository Analyst
+#   goal: >
+#     Analyze a specific GitHub repository belonging to Assia Chafi (given its name)
+#     and extract key details like its description, purpose, main programming language,
+#     and relevant information from its README file.
+#   backstory: >
+#     You specialize in deep dives into individual software projects on GitHub.
+#     Given a repository name, you meticulously examine its contents, focusing on the
+#     README, code structure, and metadata to understand its purpose, technology stack,
+#     and key features. You are detail-oriented and provide concise summaries.
+#   tools:
+#     - get_github_repo_details_tool # Requires implementation: Tool to get details (README, languages, etc.) for a specific repo
+
 reporting_analyst:
   role: >
     Reporting Analyst

@@ -3,7 +3,6 @@ import sys
 import warnings
 
 from datetime import datetime
-
 from portfolio_assistant.crew import PortfolioAssistant
 
 warnings.filterwarnings("ignore", category=SyntaxWarning, module="pysbd")

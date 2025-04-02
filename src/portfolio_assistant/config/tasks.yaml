@@ -11,6 +11,28 @@ extract_cv_info:
     - Certifications (list of certifications and issuing organizations)
   agent: resume_assistant
 
+list_github_projects:
+  description: >
+    Fetch a list of achafi's public GitHub repositories using the
+    `list_github_repos_tool`. Focus on repository names and descriptions.
+    The tool will use 'achafi' as the username.
+  expected_output: >
+    A list of public GitHub repository names and their descriptions associated with the user 'achafi', as returned by the tool.
+    Example: ["project-name-1: Description of project 1", "project-name-2: Description of project 2"]
+  agent: github_project_lister
+
+# fetch_specific_github_project_details:
+#   description: >
+#     Retrieve detailed information for a specific GitHub repository named '{repo_name}'
+#     associated with Assia Chafi using the `get_github_repo_details_tool`.
+#     Extract the repository's description, main language, and a summary of its README content.
+#   expected_output: >
+#     A structured summary of the specified GitHub repository '{repo_name}', including:
+#     - Its description.
+#     - The primary programming language used.
+#     - Key information or purpose described in the README file.
+#   agent: github_project_detailer
+
 reporting_task:
   description: >
     Respond to visitors {question} about Assia Chafi skills, experience,

@@ -5,11 +5,16 @@ from crewai.project import CrewBase, agent, crew, task
 # you can use the @before_kickoff and @after_kickoff decorators
 # https://docs.crewai.com/concepts/crews#example-crew-class-with-decorators
 from crewai_tools import PDFSearchTool
-from .models.output_models import CVInfo, VisitorResponse
+from .models.output_models import CVInfo, VisitorResponse, GitHubRepositoriesResponse
+from .tools.custom_tool import GitHubReposTool
 
 pdf_search_tool = PDFSearchTool(pdf="knowledge/CV_Assia_Chafi_2025.pdf")
 pdf_search_tool.description = (
     "Search the CV PDF with a text query to find relevant information"
+)
+github_repos_tool = GitHubReposTool()
+github_repos_tool.description = (
+    "Fetch and list public GitHub repositories associated with 'achafi' GitHub profile, providing their names and potentially brief descriptions."
 )
 
 
@@ -27,11 +32,16 @@ class PortfolioAssistant:
     # https://docs.crewai.com/concepts/agents#agent-tools
     @agent
     def resume_assistant(self) -> Agent:
-        return Agent(config=self.agents_config["resume_assistant"], verbose=True)
+        return Agent(config=self.agents_config["resume_assistant"], tools=[pdf_search_tool],verbose=True)
+
+    @agent
+    def github_project_lister(self) -> Agent:
+        return Agent(config=self.agents_config["github_project_lister"], tools=[github_repos_tool], verbose=True)
 
     @agent
     def reporting_analyst(self) -> Agent:
         return Agent(config=self.agents_config["reporting_analyst"], verbose=True)
+ 
 
     # To learn more about structured task outputs,
     # task dependencies, and task callbacks, check out the documentation:
@@ -43,9 +53,27 @@ class PortfolioAssistant:
             description=self.tasks_config["extract_cv_info"]["description"],
             expected_output=self.tasks_config["extract_cv_info"]["expected_output"],
             output_pydantic=CVInfo,
-            tools=[pdf_search_tool],
+            
             agent=resume_assistant_agent,
         )
+    
+    @task
+    def list_github_projects_task(self) -> Task:
+        github_project_lister_agent = self.github_project_lister()
+        return Task(
+            description=self.tasks_config["github_project_lister"]["description"],
+            agent=github_project_lister_agent
+        )
+
+    @task
+    def list_github_projects_task(self) -> Task:
+        github_project_lister_agent = self.github_project_lister()
+        return Task(
+            description=self.tasks_config["list_github_projects"]["description"],
+            expected_output=self.tasks_config["list_github_projects"]["expected_output"],
+            output_pydantic=GitHubRepositoriesResponse,
+        agent=github_project_lister_agent
+    )
 
     @task
     def reporting_task(self) -> Task:
@@ -67,10 +95,12 @@ class PortfolioAssistant:
         return Crew(
             agents=[
                 self.resume_assistant(),
+                self.github_project_lister(),
                 self.reporting_analyst(),
             ],  # Call the functions to get agent objects
             tasks=[
                 self.extract_cv_info(),
+                self.list_github_projects_task(),
                 self.reporting_task(),
             ],  # Call the functions to get task objects
             verbose=True,
